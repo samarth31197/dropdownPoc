@@ -1,10 +1,10 @@
 import React from 'react';
 
 const TABS = {
-    ALL_TYPES: 'ALL_TYPES',
-    DOCTORS: 'DOCTORS',
-    PLACES: 'PLACES',
-    DRUGS: 'DRUGS',
+    ALLTYPES: 'All Types',
+    DOCTORS: 'Doctors',
+    PLACES: 'Places',
+    DRUGS: 'Drugs',
 }
 
 const RESULTS = 'Lobbyist,Alert,Configuration,Encroachment,Hammer,Woven,Cannibal,Failure,Stroll,Headway,Receptionist,Pedagogy,Antique,Eighteenth-century,Skid,Board,Conform,Evacuate,Unconcerned,Nationalist,High-stakes,Signatory,Pleasure,Palpable,Post,Repudiation,Satellite,Faint,Sturgeon,Subordinate,Translator,Shredded,Amazement,Motion,Espionage,Empathetic,Parable,Bet,Assessment,Gong,Sport'.split(',');
@@ -23,7 +23,7 @@ class Dropdown extends React.Component {
     state = {
         search: '',
         selectedItem: '',
-        selectedTab: TABS.ALL_TYPES,
+        selectedTab: TABS.ALLTYPES,
         dropDownActive: false,
         results: resGenerator(),
         allTabs: Object.keys(TABS),
@@ -32,7 +32,12 @@ class Dropdown extends React.Component {
     handleWindowClick = (e) => {
         if(!this.state.selectedItem) {
             this.resetState();
+        } else {
+            this.setState({
+                dropDownActive: false
+            })
         }
+
     }
 
     componentDidMount() {
@@ -43,9 +48,9 @@ class Dropdown extends React.Component {
         window.removeEventListener('click', this.handleWindowClick);
     }
 
-    handeTabChange = (tab) => {
+    handleTabChange = (tab) => {
         this.setState({ 
-            selectedTab: tab,
+            selectedTab: TABS[tab],
             results: resGenerator(),
          })
     }
@@ -87,7 +92,6 @@ class Dropdown extends React.Component {
         this.setState({
             search: '',
             selectedItem: '',
-            selectedTab: TABS.ALL_TYPES,
             dropDownActive: false,
         })
     }
@@ -127,15 +131,15 @@ class Dropdown extends React.Component {
             {this.state.search !== '' && <button className="dropdown-reset-button" onClick={this.resetState}>X</button>}
            </div>
         
-           { this.state.dropDownActive && <div className="dropdown-content-container">
+           { <div className={`dropdown-content-container ${this.state.dropDownActive ? 'visible': 'hidden'}`}>
             <nav className="dropdown-nav">
                 { this.state.allTabs.map((tab)=> {
-                    if(tab === this.state.selectedTab) {
+                    if(TABS[tab] === this.state.selectedTab) {
                         return <span key={tab} className="dropdown-nav-tab--active">
-                        {tab}
+                        {TABS[tab]}
                          </span>
                     }
-                    return <span key={tab} className="dropdown-nav-tab" onClick={() => { this.handeTabChange(tab) }}>{tab}</span>
+                    return <span key={tab} className="dropdown-nav-tab" onClick={() => { this.handleTabChange(tab) }}>{TABS[tab]}</span>
                 }) }
             </nav>
 
